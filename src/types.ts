@@ -11,7 +11,8 @@ export type ActiveTab =
   | 'resources'
   | 'practice'
   | 'progress'
-  | 'ai-tutor';
+  | 'ai-tutor'
+  | 'setup-guide';
 
 export type QuestionPattern = 'MCQ' | 'MSQ' | 'NAT' | 'AssertionReason' | 'MatchMatrix';
 
@@ -320,6 +321,26 @@ export interface ScoringRoundStrategy {
   selectionCriteria: string;
 }
 
+export type YieldTier = 'high-yield' | 'medium-yield' | 'low-yield';
+
+export interface TopicYieldItem {
+  id: string;
+  topicName: string;
+  subjectName: string;
+  examId: ExamType;
+  yieldTier: YieldTier;
+  marksContribution: number; // typical marks in paper
+  marksRange: string;
+  expectedQuestions: string;
+  avgStudyHours: number;
+  roiRating: 'Very High' | 'High' | 'Moderate' | 'Low';
+  difficulty: 'Easy' | 'Moderate' | 'Challenging';
+  pyqRecurrencePercent: number; // e.g. 95%
+  tacticalNote: string;
+  recommendedOrder: 'Must Master First' | 'Core Scoring Block' | 'Conditional / If Time Permits';
+  relatedConceptId?: string;
+}
+
 export interface ScoreBenchmark {
   targetTier: string;
   targetMarks: string;
@@ -343,6 +364,7 @@ export interface ExamRoadmap {
   executiveSummary: string;
   phases: RoadmapPhase[];
   subjectWeightages: SubjectWeightage[];
+  topicYields?: TopicYieldItem[];
   guaranteedMarksBucket: {
     categoryTitle: string;
     potentialMarks: string;

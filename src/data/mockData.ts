@@ -1,5 +1,6 @@
 import { ExamInfo, Subject, Question, ResourceItem, ConceptMastery, StudentProfile, RepeatedErrorRecord, AccuracyTrend, WeaknessItem } from '../types';
 import { SYLLABUS_RESOURCES } from './syllabusResources';
+import { ALL_DOMAINS_QUESTIONS, DOMAIN_DIAGNOSTIC_QUESTIONS } from './domainQuestionsData';
 
 export const EXAMS_LIST: ExamInfo[] = [
   {
@@ -240,7 +241,7 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
     },
     {
       id: 'gate-dsa',
-      name: 'Data Structures & Algorithms',
+      name: 'Algorithms & Data Structures',
       examId: 'GATE',
       iconName: 'Code',
       description: 'Asymptotic Analysis, Trees, Heaps, Graphs, Dynamic Programming, and Greedy Algorithms.',
@@ -258,6 +259,43 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
               keyFormulaOrRule: 'Balance Factor = Height(Left Subtree) - Height(Right Subtree) ∈ {-1, 0, 1}.'
             }
           ]
+        },
+        {
+          id: 'gate-algo-dp',
+          name: 'Dynamic Programming',
+          subjectId: 'gate-dsa',
+          concepts: [
+            {
+              id: 'algo-dp-recurrence',
+              name: 'Recurrence Relations & Optimal Substructure',
+              topicId: 'gate-algo-dp',
+              description: 'Overlapping subproblems, state compression, memoization to tabulation.',
+              keyFormulaOrRule: '0/1 Knapsack: dp[i][w] = max(dp[i-1][w], val[i] + dp[i-1][w-wt[i]]).'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'gate-toc',
+      name: 'Theory of Computation',
+      examId: 'GATE',
+      iconName: 'Cpu',
+      description: 'Regular Languages, Finite Automata, Context-Free Grammars, Turing Machines, and Decidability.',
+      topics: [
+        {
+          id: 'gate-toc-decidability',
+          name: 'Decidability & Complexity',
+          subjectId: 'gate-toc',
+          concepts: [
+            {
+              id: 'toc-halting-problem',
+              name: 'Halting Problem & Rices Theorem',
+              topicId: 'gate-toc-decidability',
+              description: 'Undecidability of halting problem, non-trivial semantic properties of RE languages.',
+              keyFormulaOrRule: "Rice's Theorem: Any non-trivial property of the language recognized by a Turing machine is undecidable."
+            }
+          ]
         }
       ]
     }
@@ -271,16 +309,74 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
       description: 'Mechanics, Electrodynamics, Optics, Thermodynamics, Modern Physics.',
       topics: [
         {
-          id: 'jee-phys-mechanics',
-          name: 'Kinematics & Newton Laws',
+          id: 'jee-mechanics',
+          name: 'Rotational Motion & Mechanics',
           subjectId: 'jee-phys',
           concepts: [
             {
+              id: 'jee-rotational-torque',
+              name: 'Torque & Angular Momentum',
+              topicId: 'jee-mechanics',
+              description: 'Torque equations, instantaneous axis of rotation (IAOR), angular momentum conservation.',
+              keyFormulaOrRule: 'tau = I * alpha = dL / dt; Total Kinetic Energy K = 0.5 * m * v_cm^2 + 0.5 * I_cm * omega^2.'
+            },
+            {
               id: 'jee-projectile',
               name: 'Projectile Motion & Trajectory',
-              topicId: 'jee-phys-mechanics',
+              topicId: 'jee-mechanics',
               description: 'Horizontal range, maximum height, trajectory equation under gravity.',
               keyFormulaOrRule: 'Range R = (u^2 * sin(2θ)) / g; H_max = (u^2 * sin^2(θ)) / (2g).'
+            }
+          ]
+        },
+        {
+          id: 'jee-optics',
+          name: 'Wave Optics',
+          subjectId: 'jee-phys',
+          concepts: [
+            {
+              id: 'jee-wave-interference',
+              name: 'YDSE Fringe Width & Phase Difference',
+              topicId: 'jee-optics',
+              description: 'Path difference with glass slabs, intensity distribution, and diffraction patterns.',
+              keyFormulaOrRule: 'Fringe Width beta = (lambda * D) / d; Optical path shift Delta x = (mu - 1) * t.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'jee-chem',
+      name: 'Chemistry',
+      examId: 'JEE',
+      iconName: 'FlaskConical',
+      description: 'Physical Chemistry, Organic Reaction Mechanisms, Chemical Bonding, Coordination Compounds.',
+      topics: [
+        {
+          id: 'jee-phys-chem',
+          name: 'Physical Chemistry & Thermodynamics',
+          subjectId: 'jee-chem',
+          concepts: [
+            {
+              id: 'jee-thermo-first-law',
+              name: 'First & Second Laws, Gibbs Free Energy',
+              topicId: 'jee-phys-chem',
+              description: 'Reversible vs irreversible work, Hess Law, spontaneity criteria.',
+              keyFormulaOrRule: 'Delta G = Delta H - T * Delta S; w_rev = -2.303 * nRT * log(V2 / V1).'
+            }
+          ]
+        },
+        {
+          id: 'jee-org-chem',
+          name: 'Organic Reaction Mechanisms',
+          subjectId: 'jee-chem',
+          concepts: [
+            {
+              id: 'jee-substitution-elimination',
+              name: 'SN1, SN2, E1, E2 Reaction Matrix',
+              topicId: 'jee-org-chem',
+              description: 'Substrate sterics, solvent effects, Walden inversion vs racemization.',
+              keyFormulaOrRule: 'SN2 favored by polar aprotic solvents (DMSO/DMF); E2 favored by strong bulky bases and heat.'
             }
           ]
         }
@@ -294,16 +390,37 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
       description: 'Calculus, Vectors & 3D, Coordinate Geometry, Algebra, Probability.',
       topics: [
         {
-          id: 'jee-math-calculus',
+          id: 'jee-calculus',
           name: 'Integral Calculus',
           subjectId: 'jee-math',
           concepts: [
             {
+              id: 'jee-definite-integrals',
+              name: 'Kings Property & Periodic Functions',
+              topicId: 'jee-calculus',
+              description: 'Definite integral symmetry rules, Leibniz rule for differentiation under integral sign.',
+              keyFormulaOrRule: '∫_a^b f(x) dx = ∫_a^b f(a+b-x) dx.'
+            },
+            {
               id: 'jee-integration-parts',
-              name: 'Integration by Parts & Definite Integrals',
-              topicId: 'jee-math-calculus',
-              description: 'ILATE rule, properties of definite integrals (King property).',
+              name: 'Integration by Parts',
+              topicId: 'jee-calculus',
+              description: 'ILATE priority sequence and reduction formulas.',
               keyFormulaOrRule: '∫ u v dx = u ∫ v dx - ∫ (u\' ∫ v dx) dx.'
+            }
+          ]
+        },
+        {
+          id: 'jee-vectors-3d',
+          name: 'Vectors & 3D Coordinate Geometry',
+          subjectId: 'jee-math',
+          concepts: [
+            {
+              id: 'jee-3d-lines-planes',
+              name: 'Skew Lines & Vector Triple Products',
+              topicId: 'jee-vectors-3d',
+              description: 'Scalar triple product box rules, shortest distance between skew lines, intersection of planes.',
+              keyFormulaOrRule: 'Shortest Distance d = |(b1 x b2) . (a2 - a1)| / |b1 x b2|.'
             }
           ]
         }
@@ -319,16 +436,99 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
       description: 'Constitutional framework, Fundamental Rights, Parliament, Judiciary, Statutory Bodies.',
       topics: [
         {
-          id: 'upsc-polity-const',
-          name: 'Fundamental Rights & Duties',
+          id: 'upsc-constitution',
+          name: 'Constitutional Framework',
           subjectId: 'upsc-polity',
           concepts: [
             {
-              id: 'upsc-rights-writs',
-              name: 'Article 32 & Constitutional Writs',
-              topicId: 'upsc-polity-const',
-              description: 'Habeas Corpus, Mandamus, Prohibition, Certiorari, and Quo-Warranto.',
-              keyFormulaOrRule: 'Mandamus cannot be issued against the President of India or State Governors.'
+              id: 'upsc-fundamental-rights',
+              name: 'Articles 14, 19, 21 and Writs',
+              topicId: 'upsc-constitution',
+              description: 'Articles 12-35, Golden Triangle (14, 19, 21), Article 32 vs Article 226 writ jurisdiction.',
+              keyFormulaOrRule: 'Writs: Habeas Corpus, Mandamus, Prohibition, Certiorari, Quo-Warranto.'
+            }
+          ]
+        },
+        {
+          id: 'upsc-parliament',
+          name: 'Union Legislature & Executive',
+          subjectId: 'upsc-polity',
+          concepts: [
+            {
+              id: 'upsc-parliamentary-bills',
+              name: 'Ordinary, Money and Constitutional Amendment Bills',
+              topicId: 'upsc-parliament',
+              description: 'Article 110 Money Bills, Joint Sittings (Art. 108), Censure vs No-Confidence motions.',
+              keyFormulaOrRule: 'Money Bills cannot be amended or rejected by Rajya Sabha; no joint sitting allowed for Money Bills.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'upsc-econ',
+      name: 'Indian Economy',
+      examId: 'UPSC',
+      iconName: 'TrendingUp',
+      description: 'Macroeconomics, Monetary Policy, Fiscal Policy, External Sector, and Inflation.',
+      topics: [
+        {
+          id: 'upsc-banking-finance',
+          name: 'Monetary Policy & Banking System',
+          subjectId: 'upsc-econ',
+          concepts: [
+            {
+              id: 'upsc-rbi-monetary-tools',
+              name: 'Repo Rate, SDF, CRR, and Open Market Operations',
+              topicId: 'upsc-banking-finance',
+              description: 'Liquidity adjustment facility, Standing Deposit Facility, inflation targeting band.',
+              keyFormulaOrRule: 'Money Multiplier = 1 / CRR; RBI Inflation target: 4% (+/- 2%) CPI-C.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'upsc-hist',
+      name: 'Modern Indian History',
+      examId: 'UPSC',
+      iconName: 'BookOpen',
+      description: 'Advent of Europeans, Freedom Struggle (1857-1947), Socio-Religious Reform Movements.',
+      topics: [
+        {
+          id: 'upsc-freedom-struggle',
+          name: 'Indian National Movement (1885-1947)',
+          subjectId: 'upsc-hist',
+          concepts: [
+            {
+              id: 'upsc-gandhian-phase',
+              name: 'Non-Cooperation, Civil Disobedience & Quit India',
+              topicId: 'upsc-freedom-struggle',
+              description: 'Chronology of Gandhian mass movements, Government of India Acts 1919 and 1935.',
+              keyFormulaOrRule: 'Timeline: NCM (1920-22), CDM (1930-34), Quit India (1942).'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'upsc-geo',
+      name: 'Geography & Environment',
+      examId: 'UPSC',
+      iconName: 'Globe',
+      description: 'Physical Geography, Climatology, Oceanography, Indian Monsoon, Biogeography.',
+      topics: [
+        {
+          id: 'upsc-climatology',
+          name: 'Physical & Indian Geography',
+          subjectId: 'upsc-geo',
+          concepts: [
+            {
+              id: 'upsc-monsoon-mechanism',
+              name: 'ITCZ Shift, Jet Streams & Mascarene High',
+              topicId: 'upsc-climatology',
+              description: 'Thermal contrast, Somali Jet, Tropical Easterly Jet, ENSO, and Indian Ocean Dipole.',
+              keyFormulaOrRule: 'Positive IOD & La Niña favor robust Indian Monsoon rainfall.'
             }
           ]
         }
@@ -337,16 +537,30 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
   ],
   Banking: [
     {
-      id: 'bank-quant',
+      id: 'bank-qa',
       name: 'Quantitative Aptitude',
       examId: 'Banking',
       iconName: 'Calculator',
       description: 'Data Interpretation, Arithmetic Word Problems, Number Series, Simplification.',
       topics: [
         {
+          id: 'bank-di',
+          name: 'Data Interpretation',
+          subjectId: 'bank-qa',
+          concepts: [
+            {
+              id: 'bank-caselet-di',
+              name: 'Venn Diagram & Missing Table DI',
+              topicId: 'bank-di',
+              description: 'Speed math calculation tricks, percentage-to-fraction conversions, ratio balancing.',
+              keyFormulaOrRule: 'Percentage change = [(Final - Initial) / Initial] * 100.'
+            }
+          ]
+        },
+        {
           id: 'bank-arithmetic',
           name: 'Commercial Mathematics',
-          subjectId: 'bank-quant',
+          subjectId: 'bank-qa',
           concepts: [
             {
               id: 'bank-ci-si',
@@ -354,6 +568,52 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
               topicId: 'bank-arithmetic',
               description: 'Effective rate of interest, 2-year and 3-year difference formulas.',
               keyFormulaOrRule: 'Difference for 2 years: D = P * (R/100)^2.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'bank-reasoning',
+      name: 'Reasoning Ability',
+      examId: 'Banking',
+      iconName: 'Layers',
+      description: 'Puzzles, Seating Arrangement, Syllogisms, Input-Output, Blood Relations, Coding-Decoding.',
+      topics: [
+        {
+          id: 'bank-puzzles',
+          name: 'Seating & Floor Puzzles',
+          subjectId: 'bank-reasoning',
+          concepts: [
+            {
+              id: 'bank-floor-flat-puzzles',
+              name: 'Multi-Case Elimination Technique',
+              topicId: 'bank-puzzles',
+              description: 'Mastering 2-case branch method to solve floor & flat puzzles with relations in under 4 mins.',
+              keyFormulaOrRule: 'Set up parallel assumption threads; eliminate immediately on contradiction.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'bank-ga',
+      name: 'Banking & Financial Awareness',
+      examId: 'Banking',
+      iconName: 'Landmark',
+      description: 'RBI Regulations, Banking Fundamentals, Priority Sector Lending, Monetary Policies, Financial Terms.',
+      topics: [
+        {
+          id: 'bank-awareness',
+          name: 'RBI Regulations & Banking Fundamentals',
+          subjectId: 'bank-ga',
+          concepts: [
+            {
+              id: 'bank-rbi-regulations',
+              name: 'Priority Sector Lending & Basel III Norms',
+              topicId: 'bank-awareness',
+              description: 'NPA classifications (SMA-0, SMA-1, SMA-2), PSL targets (40% for domestic banks), UPI/NEFT/RTGS.',
+              keyFormulaOrRule: 'Substandard asset: NPA for period <= 12 months; Doubtful asset: NPA > 12 months.'
             }
           ]
         }
@@ -381,12 +641,26 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
               keyFormulaOrRule: 'Continuous system is BIBO stable iff integral |h(t)| dt < infinity.'
             }
           ]
+        },
+        {
+          id: 'ece-transforms',
+          name: 'Transform Domain Analysis',
+          subjectId: 'ece-signals',
+          concepts: [
+            {
+              id: 'ece-z-transform-roc',
+              name: 'Z-Transform & ROC Properties',
+              topicId: 'ece-transforms',
+              description: 'Region of Convergence properties, causality vs stability, initial and final value theorems.',
+              keyFormulaOrRule: 'LTI System is stable iff ROC of H(z) includes the unit circle |z| = 1.'
+            }
+          ]
         }
       ]
     },
     {
       id: 'ece-analog',
-      name: 'Analog Circuits & Op-Amps',
+      name: 'Analog Circuits',
       examId: 'GATE_ECE',
       iconName: 'Cpu',
       description: 'BJT & MOSFET amplifiers, Op-Amp ideal and non-ideal characteristics, Feedback oscillators.',
@@ -406,19 +680,42 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
           ]
         }
       ]
+    },
+    {
+      id: 'ece-control',
+      name: 'Control Systems',
+      examId: 'GATE_ECE',
+      iconName: 'TrendingUp',
+      description: 'Transfer functions, Block diagram reduction, Routh-Hurwitz, Root Locus, Bode plots, Nyquist criterion.',
+      topics: [
+        {
+          id: 'ece-frequency-response',
+          name: 'Frequency Domain Analysis',
+          subjectId: 'ece-control',
+          concepts: [
+            {
+              id: 'ece-nyquist-criterion',
+              name: 'Gain Margin & Phase Margin',
+              topicId: 'ece-frequency-response',
+              description: 'Encirclements of (-1, j0) point, mapping of contours, and stability determination.',
+              keyFormulaOrRule: 'Nyquist Rule: N = P - Z (where N = number of clockwise encirclements).'
+            }
+          ]
+        }
+      ]
     }
   ],
   NEET: [
     {
       id: 'neet-bio',
-      name: 'Biology (Botany & Zoology)',
+      name: 'Biology',
       examId: 'NEET',
       iconName: 'Dna',
       description: 'Human Physiology, Genetics and Evolution, Cell Structure, Plant Physiology, Ecology.',
       topics: [
         {
           id: 'neet-genetics',
-          name: 'Genetics & Molecular Basis of Inheritance',
+          name: 'Genetics & Molecular Biology',
           subjectId: 'neet-bio',
           concepts: [
             {
@@ -426,7 +723,21 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
               name: 'Semi-Conservative DNA Replication & Enzymes',
               topicId: 'neet-genetics',
               description: 'Meselson-Stahl experiment, DNA Polymerase III proofreading, Okazaki fragments.',
-              keyFormulaOrRule: 'DNA Polymerase synthesizes strictly in 5\' to 3\' direction.'
+              keyFormulaOrRule: "DNA Polymerase synthesizes strictly in 5' to 3' direction."
+            }
+          ]
+        },
+        {
+          id: 'neet-physiology',
+          name: 'Human Physiology',
+          subjectId: 'neet-bio',
+          concepts: [
+            {
+              id: 'neet-cardiac-cycle',
+              name: 'Cardiac Cycle & Heart Sounds',
+              topicId: 'neet-physiology',
+              description: 'Atrial systole, ventricular systole, joint diastole, ECG waves, regulation of cardiac activity.',
+              keyFormulaOrRule: 'Stroke Volume = 70 mL; Cardiac Output = Stroke Volume * Heart Rate (~5 L/min).'
             }
           ]
         }
@@ -434,11 +745,25 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
     },
     {
       id: 'neet-chem',
-      name: 'Chemistry for NEET',
+      name: 'Chemistry',
       examId: 'NEET',
       iconName: 'FlaskConical',
-      description: 'Physical Chemistry, Organic reaction mechanisms, Chemical Bonding, Coordination Compounds.',
+      description: 'Physical Chemistry, Organic reaction mechanisms, Chemical Bonding, Coordination Compounds, Biomolecules.',
       topics: [
+        {
+          id: 'neet-org-chem',
+          name: 'Organic & Inorganic Chemistry',
+          subjectId: 'neet-chem',
+          concepts: [
+            {
+              id: 'neet-biomolecules-amino',
+              name: 'Amino Acids & Zwitterions',
+              topicId: 'neet-org-chem',
+              description: 'Essential vs Non-essential amino acids, peptide linkages, primary/secondary/tertiary structures.',
+              keyFormulaOrRule: 'Isoelectric point pI = (pK1 + pK2) / 2.'
+            }
+          ]
+        },
         {
           id: 'neet-equilibrium',
           name: 'Chemical & Ionic Equilibrium',
@@ -454,16 +779,53 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
           ]
         }
       ]
+    },
+    {
+      id: 'neet-phys',
+      name: 'Physics',
+      examId: 'NEET',
+      iconName: 'Compass',
+      description: 'Mechanics, Current Electricity, Magnetism, Optics, Modern Physics.',
+      topics: [
+        {
+          id: 'neet-electricity',
+          name: 'Current Electricity',
+          subjectId: 'neet-phys',
+          concepts: [
+            {
+              id: 'neet-kirchhoff-rules',
+              name: 'Kirchhoff Current & Voltage Laws',
+              topicId: 'neet-electricity',
+              description: 'Junction rule (charge conservation), loop rule (energy conservation), Wheatstone bridge.',
+              keyFormulaOrRule: 'Wheatstone Bridge balance condition: R1 / R2 = R3 / R4.'
+            }
+          ]
+        }
+      ]
     }
   ],
   CAT: [
     {
       id: 'cat-qa',
-      name: 'Quantitative Aptitude (QA)',
+      name: 'Quantitative Aptitude',
       examId: 'CAT',
       iconName: 'Sigma',
       description: 'Arithmetic, Algebra, Geometry & Mensuration, Modern Math, Number Systems.',
       topics: [
+        {
+          id: 'cat-number-systems',
+          name: 'Number Systems & Properties',
+          subjectId: 'cat-qa',
+          concepts: [
+            {
+              id: 'cat-remainder-theorems',
+              name: 'Euler Totient, Fermat and Wilson Theorems',
+              topicId: 'cat-number-systems',
+              description: 'Unit digit cyclicity, power cycle shortcuts, highest power of primes in factorials.',
+              keyFormulaOrRule: 'Euler Theorem: a^phi(n) = 1 (mod n) when gcd(a,n) = 1.'
+            }
+          ]
+        },
         {
           id: 'cat-algebra',
           name: 'Quadratic Equations & Polynomials',
@@ -489,15 +851,38 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
       topics: [
         {
           id: 'cat-arrangements',
-          name: 'Matrix & Multi-Dimensional Grid Arrangements',
+          name: 'Logical Deductions & Grids',
           subjectId: 'cat-dilr',
           concepts: [
             {
-              id: 'cat-grid-elimination',
-              name: 'Cross-Grid Constraint Elimination',
+              id: 'cat-matrix-puzzles',
+              name: 'Binary Grids & Elimination Tables',
               topicId: 'cat-arrangements',
-              description: 'Systematic true/false grid elimination for multi-variable constraint sets.',
-              keyFormulaOrRule: 'Every entity has a 1-to-1 unique mapping; test extreme conditions first.'
+              description: 'Cross-grid multi-variable table elimination without trial and error.',
+              keyFormulaOrRule: 'Fill direct facts first, establish conditional bridges, eliminate contradictions.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'cat-varc',
+      name: 'Verbal Ability & Reading Comprehension',
+      examId: 'CAT',
+      iconName: 'BookOpen',
+      description: 'Reading Comprehension, Para Jumbles, Para Summary, Odd One Out.',
+      topics: [
+        {
+          id: 'cat-rc-passages',
+          name: 'Reading Comprehension',
+          subjectId: 'cat-varc',
+          concepts: [
+            {
+              id: 'cat-rc-inference',
+              name: 'Author Tone & Elimination of Extreme Options',
+              topicId: 'cat-rc-passages',
+              description: 'Critical reasoning assumptions, author tone identification, distractor elimination.',
+              keyFormulaOrRule: 'Eliminate out-of-scope, distorted, and extreme (always/never) answer options.'
             }
           ]
         }
@@ -506,7 +891,10 @@ export const SUBJECTS_DATA: Record<string, Subject[]> = {
   ]
 };
 
-export const INITIAL_QUESTIONS: Question[] = [
+export { DOMAIN_DIAGNOSTIC_QUESTIONS };
+export const INITIAL_QUESTIONS: Question[] = ALL_DOMAINS_QUESTIONS;
+
+export const LEGACY_QUESTIONS: Question[] = [
   // 1. TCP Congestion Control (GATE PYQ 2024 - Classic)
   {
     id: 'q-cn-01',

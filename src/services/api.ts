@@ -1,4 +1,5 @@
-import { Question, ErrorType, WeaknessItem, StudentProfile, RepeatedErrorRecord } from '../types';
+import { Question, ErrorType, WeaknessItem, StudentProfile, RepeatedErrorRecord, ExamRoadmap, ExamType } from '../types';
+import { DOMAIN_ROADMAPS } from '../data/roadmapData';
 
 export interface ExplanationResponse {
   success: boolean;
@@ -176,6 +177,25 @@ What specific problem or concept would you like to review step-by-step right now
           summary: `Forwarded resource covering fundamentals and exam problem solutions for ${resourceTitle}.`,
           recommendedForWeakness: 'Conceptual'
         }
+      };
+    }
+  },
+
+  async getExamRoadmap(exam: ExamType): Promise<{ success: boolean; roadmap: ExamRoadmap; source: string }> {
+    try {
+      const res = await fetch(`/api/roadmap/${exam}`);
+      if (!res.ok) throw new Error('API request failed');
+      const data = await res.json();
+      return {
+        success: true,
+        roadmap: data.roadmap,
+        source: 'backend-api'
+      };
+    } catch {
+      return {
+        success: true,
+        roadmap: DOMAIN_ROADMAPS[exam] || DOMAIN_ROADMAPS.GATE,
+        source: 'local-blueprint-engine'
       };
     }
   }

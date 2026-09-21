@@ -10,7 +10,8 @@ import {
   Bot, 
   BookOpen,
   Award,
-  Compass
+  Compass,
+  Terminal
 } from 'lucide-react';
 import { ActiveTab } from '../types';
 
@@ -95,6 +96,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Gemini AI Tutor & Chat',
       icon: Bot,
       badge: 'Grounding'
+    },
+    {
+      id: 'setup-guide' as ActiveTab,
+      label: 'VS Code Setup Guide',
+      icon: Terminal,
+      badge: 'Localhost'
     }
   ];
 

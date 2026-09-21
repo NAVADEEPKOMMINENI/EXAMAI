@@ -17,7 +17,8 @@ import {
   INITIAL_MASTERY,
   SYLLABUS_DATA,
   WEEKLY_ACCURACY_TRENDS,
-  REPEATED_ERRORS_HISTORY
+  REPEATED_ERRORS_HISTORY,
+  DOMAIN_DIAGNOSTIC_QUESTIONS
 } from './data/mockData';
 import { analyzeTestAttempts, updateConceptMastery, DiagnosticAnalysisResult } from './services/weaknessEngine';
 
@@ -39,6 +40,8 @@ import { PracticePage } from './pages/PracticePage';
 import { ProgressPage } from './pages/ProgressPage';
 import { PreviousPapersPage } from './pages/PreviousPapersPage';
 import { RoadmapPage } from './pages/RoadmapPage';
+import { SetupGuidePage } from './pages/SetupGuidePage';
+import { SetupGuideModal } from './components/SetupGuideModal';
 
 import { 
   FileText, 
@@ -78,6 +81,7 @@ export function App() {
   const [pdfModalPaper, setPdfModalPaper] = useState<PreviousYearPaper | null>(null);
   const [selectedGenericResource, setSelectedGenericResource] = useState<ResourceItem | null>(null);
   const [isTutorOpen, setIsTutorOpen] = useState<boolean>(false);
+  const [isSetupGuideModalOpen, setIsSetupGuideModalOpen] = useState<boolean>(false);
 
   // Handle Google Login
   const handleLogin = (profile: Partial<StudentProfile>) => {
@@ -100,9 +104,8 @@ export function App() {
     localStorage.removeItem('examai_logged_in');
   };
 
-  // Active questions for current exam (with fallback if domain is brand new)
-  const domainQuestions = questions.filter(q => q.examId === currentExam);
-  const activeQuestionsList = domainQuestions.length >= 3 ? domainQuestions : questions;
+  // Active questions tailored specifically according to each domain
+  const activeQuestionsList = DOMAIN_DIAGNOSTIC_QUESTIONS[currentExam] || questions.filter(q => q.examId === currentExam);
 
   // Filter current syllabus subjects by current exam
   const currentSubjects = SYLLABUS_DATA[currentExam] || SYLLABUS_DATA['GATE'];
@@ -205,6 +208,7 @@ export function App() {
         studentProfile={studentProfile}
         onStartDiagnostic={handleStartDiagnostic}
         onOpenTutor={() => setIsTutorOpen(true)}
+        onOpenSetupGuide={() => setIsSetupGuideModalOpen(true)}
         onLogout={handleLogout}
       />
 
@@ -230,6 +234,7 @@ export function App() {
               onSelectConceptForPractice={handleSelectConceptForPractice}
               onOpenResource={handleOpenResource}
               onSelectExam={handleSelectExam}
+              onOpenTutor={() => setIsTutorOpen(true)}
             />
           )}
 
@@ -238,6 +243,8 @@ export function App() {
               currentExam={currentExam}
               onSelectExam={handleSelectExam}
               onNavigateTab={(tab) => setActiveTab(tab)}
+              onSelectConceptForPractice={handleSelectConceptForPractice}
+              onOpenTutor={() => setIsTutorOpen(true)}
             />
           )}
 
@@ -341,11 +348,15 @@ export function App() {
             </div>
           )}
 
+          {activeTab === 'setup-guide' && (
+            <SetupGuidePage />
+          )}
+
         </main>
       </div>
 
       {/* Floating AI Tutor Button on Mobile */}
-      <div className="fixed bottom-6 right-6 md:hidden z-40">
+      <div className={`fixed ${activeTab === 'diagnostic' ? 'bottom-24 right-5' : 'bottom-6 right-6'} md:hidden z-40 transition-all duration-200`}>
         <button
           id="mobile-tutor-fab"
           type="button"
@@ -441,6 +452,13 @@ export function App() {
           </div>
         </div>
       )}
+
+      {/* Modal: VS Code Local Setup Guide Overlay */}
+      <SetupGuideModal
+        isOpen={isSetupGuideModalOpen}
+        onClose={() => setIsSetupGuideModalOpen(false)}
+        onViewFullscreenPage={() => setActiveTab('setup-guide')}
+      />
 
     </div>
   );

@@ -11,7 +11,8 @@ import {
   BrainCircuit,
   LogOut,
   User,
-  ShieldCheck
+  ShieldCheck,
+  Terminal
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -20,6 +21,7 @@ interface NavbarProps {
   studentProfile: StudentProfile;
   onStartDiagnostic: () => void;
   onOpenTutor: () => void;
+  onOpenSetupGuide?: () => void;
   onLogout?: () => void;
 }
 
@@ -29,6 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   studentProfile,
   onStartDiagnostic,
   onOpenTutor,
+  onOpenSetupGuide,
   onLogout
 }) => {
   const [examDropdownOpen, setExamDropdownOpen] = useState(false);
@@ -108,6 +111,20 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Center / Right: Action buttons & Student Status */}
         <div className="flex items-center gap-3">
           
+          {/* Setup Guide Localhost CTA */}
+          {onOpenSetupGuide && (
+            <button
+              id="nav-setup-guide-btn"
+              type="button"
+              onClick={onOpenSetupGuide}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900 border border-slate-200 transition"
+              title="Run locally in VS Code"
+            >
+              <Terminal className="w-3.5 h-3.5 text-indigo-600" />
+              <span className="hidden xl:inline">VS Code Setup</span>
+            </button>
+          )}
+
           {/* AI Tutor Quick Access */}
           <button
             id="nav-ai-tutor-btn"
@@ -198,6 +215,25 @@ export const Navbar: React.FC<NavbarProps> = ({
                     </span>
                   </div>
                 </div>
+
+                {/* Local Setup Option in Dropdown */}
+                {onOpenSetupGuide && (
+                  <div className="py-2 border-b border-slate-100">
+                    <button
+                      type="button"
+                      id="navbar-profile-setup-guide-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setProfileDropdownOpen(false);
+                        onOpenSetupGuide();
+                      }}
+                      className="w-full flex items-center gap-2 py-1.5 px-2 rounded-lg hover:bg-slate-50 text-slate-700 text-xs font-semibold transition text-left"
+                    >
+                      <Terminal className="w-3.5 h-3.5 text-indigo-600" />
+                      <span>VS Code Local Setup Guide</span>
+                    </button>
+                  </div>
+                )}
 
                 {/* Sign Out / Switch Account */}
                 {onLogout && (

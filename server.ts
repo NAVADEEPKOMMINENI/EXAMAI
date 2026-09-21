@@ -4,6 +4,8 @@ import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 
+import { DOMAIN_ROADMAPS } from "./src/data/roadmapData";
+
 dotenv.config();
 
 const app = express();
@@ -30,6 +32,18 @@ app.get("/api/health", (req, res) => {
     status: "ok",
     aiConfigured: Boolean(process.env.GEMINI_API_KEY),
     aiActive: isGeminiActive,
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Learning Roadmap endpoint for exam domains
+app.get("/api/roadmap/:exam", (req, res) => {
+  const exam = (req.params.exam || 'GATE') as keyof typeof DOMAIN_ROADMAPS;
+  const roadmap = DOMAIN_ROADMAPS[exam] || DOMAIN_ROADMAPS.GATE;
+  res.json({
+    success: true,
+    exam,
+    roadmap,
     timestamp: new Date().toISOString(),
   });
 });
